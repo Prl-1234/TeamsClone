@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:background="@color/lightGray"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:id="@+id/top_stuck"
+        android:layout_width="match_parent"
+        android:background="@color/lightGray"
+        android:padding="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_height="50dp">
+
+        <ImageView
+            android:layout_width="34dp"
+            android:id="@+id/back_from_chat"
+            android:layout_marginLeft="4dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_back" />
+        <ImageView
+            android:layout_width="50dp"
+            android:id="@+id/user_image"
+            android:layout_marginLeft="4dp"
+            android:layout_toRightOf="@+id/back_from_chat"
+            android:layout_height="match_parent"
+            android:src="@mipmap/ic_launcher" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_toRightOf="@+id/user_image"
+            android:layout_height="match_parent"
+            android:textSize="25sp"
+            android:layout_centerVertical="true"
+            android:textColor="@android:color/black"
+            android:id="@+id/name_chat_act"
+            android:text="Name here"
+            />
+        <ImageView
+            android:layout_width="34dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/ic_block"
+            android:id="@+id/block_chat"
+            />
+        <ImageView
+            android:layout_width="34dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/ic_block"
+            android:id="@+id/unblock_chat"
+            app:tint="@color/green" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:id="@+id/middle"
+        android:padding="5dp"
+        android:background="@color/lightGray"
+        android:layout_marginTop="5dp"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/top_stuck"
+        android:layout_marginBottom="60dp">
+            <ListView
+                android:stackFromBottom="true"
+                android:transcriptMode="alwaysScroll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/chat_personal"
+                android:divider="@android:color/transparent"
+                android:dividerHeight="2dp"
+                />
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_alignParentBottom="true"
+        android:padding="5dp"
+        android:layout_height="60dp">
+
+        <EditText
+            android:id="@+id/write_msg"
+            android:layout_width="376dp"
+            android:inputType="textMultiLine"
+            android:maxLines="4"
+            android:textColor="@android:color/black"
+            android:layout_height="match_parent"
+            android:layout_marginRight="34dp"
+            android:textColorHint="@android:color/darker_gray"
+            android:hint="Write a message"
+            android:textSize="20sp" />
+        <ImageView
+            android:layout_width="34dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_send"
+            android:id="@+id/send_msg"
+            android:layout_alignParentRight="true"
+            />
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

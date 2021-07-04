@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="7dp">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:id="@+id/search_bar"
+        android:layout_height="50dp">
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="50dp"
+            android:id="@+id/search"
+            android:src="@drawable/ic_search"
+            android:layout_alignParentRight="true" />
+        <EditText
+            android:textColorHint="@android:color/darker_gray"
+            android:layout_width="match_parent"
+            android:layout_toLeftOf="@+id/search"
+            android:id="@+id/search_text"
+            android:textColor="@color/black"
+            android:inputType="textEmailAddress"
+            android:layout_height="match_parent"
+            android:hint="Search email"/>
+    </RelativeLayout>
+    <ListView
+        android:layout_below="@+id/search_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:stackFromBottom="true"
+        android:id="@+id/chat_list"
+        />
+
+</RelativeLayout>

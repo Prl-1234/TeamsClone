@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "966009683626",
+    "project_id": "teamsclone-4bfb0",
+    "storage_bucket": "teamsclone-4bfb0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:966009683626:android:a9ed6f2e2180838c4a1ad3",
+        "android_client_info": {
+          "package_name": "com.example.teamsclone"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "966009683626-6lguqkldp45pvnn42uv0cf3npgsm30mg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.teamsclone",
+            "certificate_hash": "e9da75812f1f601e56ad2ffb3dba767951f7cb91"
+          }
+        },
+        {
+          "client_id": "966009683626-s4vgl7kbelvk7jr27krmab6njqmg34kn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyChxxeORTY0sRasWV4HUlMbP6aGurfGYy4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "966009683626-s4vgl7kbelvk7jr27krmab6njqmg34kn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

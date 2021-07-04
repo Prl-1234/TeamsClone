@@ -1,0 +1,2 @@
+rootProject.name = "Teams Clone"
+include ':app'

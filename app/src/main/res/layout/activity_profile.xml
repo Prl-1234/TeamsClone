@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
+    android:padding="8dp">
+    <ImageView
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:id="@+id/logout"
+        android:src="@drawable/ic_logout"
+        android:layout_alignParentRight="true"
+        />
+    <ImageView
+        android:layout_width="200dp"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/photo"
+        android:layout_height="200dp"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:id="@+id/cngphoto"
+        android:textSize="13sp"
+        android:textColor="@color/purple_700"
+        android:layout_centerHorizontal="true"
+        android:text="Edit Image"
+        android:layout_marginTop="10dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/photo"
+        />
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/filledTextField"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="64dp"
+        android:layout_below="@+id/cngphoto"
+        android:layout_marginEnd="32dp"
+        android:hint="Name">
+
+        <!--this is the actual edit text which takes the input-->
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/name"
+            android:background="#E5DFF7"
+            android:textColor="@color/black"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/filledTextField1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="64dp"
+        android:layout_marginEnd="32dp"
+        android:layout_below="@+id/filledTextField"
+        android:hint="Number">
+
+        <!--this is the actual edit text which takes the input-->
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/number"
+            android:background="#E5DFF7"
+            android:textColor="@color/black"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Save"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/save"
+        />
+
+</RelativeLayout>
