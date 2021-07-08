@@ -20,8 +20,11 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
@@ -38,9 +41,9 @@ public class main_chat_activity extends AppCompatActivity {
     EditText write_msg;
     FirebaseAuth mAuth;
     FirebaseFirestore db;
-    Main_chat_adapter mchatadapter;
+    Main_chat_adapter_2 mchatadapter2;
     ImageView user_image;
-    ArrayList<Map<String,String>> chat_ada;
+    ArrayList<MainChatModel> chat_ada2;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,7 +69,7 @@ public class main_chat_activity extends AppCompatActivity {
         send.setVisibility(View.GONE);
         mAuth=FirebaseAuth.getInstance();
         chat_view=(ListView) findViewById(R.id.chat_personal);
-        chat_ada=new ArrayList<>();
+        chat_ada2=new ArrayList<>();
         write_msg=(EditText) findViewById(R.id.write_msg);
 
         db.collection("users").document(mAuth.getCurrentUser().getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -89,6 +92,7 @@ public class main_chat_activity extends AppCompatActivity {
                 if(write_msg.getText().toString().length()>0){
                     final Map<String,String> one=new HashMap<>();
                     one.put(myemail,write_msg.getText().toString());
+                    String msg=write_msg.getText().toString();
                     final String time=Timestamp.now().toString();
                      final ArrayList<Map<String,String>> chat =new ArrayList<>();
                     db.collection("chats")
@@ -103,21 +107,14 @@ public class main_chat_activity extends AppCompatActivity {
                                                                     documentSnapshot.getString("us2").equals(myemail)
                                                     )){
                                                 x=1;
-                                                ArrayList<Map<String,String>> chat_al=new ArrayList<>();
-                                                chat_al=(ArrayList<Map<String, String>>) documentSnapshot.get("chat");
-                                                chat_al.add(one);
-                                                chat_ada.add(one);
-                                                mchatadapter.notifyDataSetChanged();
-                                                ArrayList<String> time_al=new ArrayList<>();
-                                                time_al=(ArrayList<String>) documentSnapshot.get("time");
-                                                time_al.add(time);
-
+                                                Map<String, Object> chat_document = new HashMap<>();
+                                                chat_document.put("talk", msg);
+                                                chat_document.put("user", myemail);
                                                 db.collection("chats")
                                                         .document(email+ myemail)
-                                                        .update("chat",chat_al);
-                                                db.collection("chats")
-                                                        .document(email+ myemail)
-                                                        .update("time",time_al);
+                                                        .collection("all chats")
+                                                        .document(time)
+                                                        .set(chat_document);
                                                 break;
                                             }
                                         }
@@ -127,21 +124,14 @@ public class main_chat_activity extends AppCompatActivity {
                                                         documentSnapshot.getString("us1").equals(myemail)
                                                 )){
                                                     x=1;
-                                                    ArrayList<Map<String,String>> chat_al=new ArrayList<>();
-                                                    chat_al=(ArrayList<Map<String, String>>) documentSnapshot.get("chat");
-                                                    chat_al.add(one);
-                                                    chat_ada.add(one);
-                                                    mchatadapter.notifyDataSetChanged();
-                                                    ArrayList<String> time_al=new ArrayList<>();
-                                                    time_al=(ArrayList<String>) documentSnapshot.get("time");
-                                                    time_al.add(time);
-
+                                                    Map<String, Object> chat_document = new HashMap<>();
+                                                    chat_document.put("talk", msg);
+                                                    chat_document.put("user", myemail);
                                                     db.collection("chats")
-                                                            .document(myemail +email)
-                                                            .update("chat",chat_al);
-                                                    db.collection("chats")
-                                                            .document(myemail +email)
-                                                            .update("time",time_al);
+                                                            .document( myemail+email)
+                                                            .collection("all chats")
+                                                            .document(time)
+                                                            .set(chat_document);
                                                     break;
                                                 }
                                             }
@@ -165,34 +155,35 @@ public class main_chat_activity extends AppCompatActivity {
                                                                 if(documentSnapshot.getString("email").equals(email)){
                                                                     othername[0] =documentSnapshot.getString("name");
                                                                     p1[0]=documentSnapshot.getString("photo");
-                                                                    Toast.makeText(main_chat_activity.this, othername[0], Toast.LENGTH_SHORT).show();
-                                                                    chat.add(one);
-                                                                    mchatadapter=new Main_chat_adapter(main_chat_activity.this,chat_ada);
-                                                                    mchatadapter.notifyDataSetChanged();
-                                                                    chat_view.setAdapter(mchatadapter);
-                                                                    mchatadapter.notifyDataSetChanged();
-                                                                    chat_ada.add(one);
-                                                                    mchatadapter.notifyDataSetChanged();
-                                                                    ArrayList<String> time_al=new ArrayList<>();
-                                                                    time_al.add(time);
                                                                     Map<String, Object> two = new HashMap<>();
                                                                     two.put("us1", email);
                                                                     two.put("us2", myemail);
-                                                                    two.put("chat", chat);
                                                                     two.put("name2", myname[0]);
                                                                     two.put("name1", othername[0]);
                                                                     two.put("p2", p2[0]);
                                                                     two.put("p1", p1[0]);
-                                                                    two.put("time",time_al);
                                                                     two.put("block by 1",false);
                                                                     two.put("block by 2",false);
                                                                     db.collection("chats").document(email+ myemail).set(two)
                                                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                                                 @Override
                                                                                 public void onSuccess(Void aVoid) {
-
+                                                                                    Map<String, Object> chat_document = new HashMap<>();
+                                                                                    chat_document.put("talk", msg);
+                                                                                    chat_document.put("user", myemail);
+                                                                                    db.collection("chats")
+                                                                                            .document(email+ myemail)
+                                                                                            .collection("all chats")
+                                                                                            .document(time)
+                                                                                            .set(chat_document).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                                        @Override
+                                                                                        public void onComplete(@NonNull Task<Void> task) {
+                                                                                            SetUpInitialChat();
+                                                                                        }
+                                                                                    });
                                                                                 }
                                                                             });
+
                                                                     break;
                                                                 }
                                                             }
@@ -399,12 +390,21 @@ public class main_chat_activity extends AppCompatActivity {
                         if ((documentSnapshot.getString("us1").equals(email) &&
                                 documentSnapshot.getString("us2").equals(myemail)
                         )) {
-                            x=1;
-                            chat_ada=((ArrayList<Map<String, String>>)documentSnapshot.get("chat"));
-                            mchatadapter = new Main_chat_adapter(main_chat_activity.this, chat_ada);
-                            mchatadapter.notifyDataSetChanged();
-                            chat_view.setAdapter(mchatadapter);
-                            mchatadapter.notifyDataSetChanged();
+                            db.collection("chats").document(email+myemail).collection("all chats").addSnapshotListener(new EventListener<QuerySnapshot>() {
+                                @Override
+                                public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                                    for(DocumentChange dc:value.getDocumentChanges()){
+                                        if(dc.getType()==DocumentChange.Type.ADDED){
+                                            chat_ada2.add(dc.getDocument().toObject(MainChatModel.class));
+                                        }
+                                    }
+                                    mchatadapter2.notifyDataSetChanged();
+                                }
+                            });
+                            mchatadapter2=new Main_chat_adapter_2(main_chat_activity.this,chat_ada2);
+                            mchatadapter2.notifyDataSetChanged();
+                            chat_view.setAdapter(mchatadapter2);
+                            mchatadapter2.notifyDataSetChanged();
                             break;
 
                         }
@@ -414,11 +414,21 @@ public class main_chat_activity extends AppCompatActivity {
                                 documentSnapshot.getString("us1").equals(myemail)
                         )) {
                             x=1;
-                            chat_ada=((ArrayList<Map<String, String>>)documentSnapshot.get("chat"));
-                            mchatadapter = new Main_chat_adapter(main_chat_activity.this, chat_ada);
-                            mchatadapter.notifyDataSetChanged();
-                            chat_view.setAdapter(mchatadapter);
-                            mchatadapter.notifyDataSetChanged();
+                            db.collection("chats").document(myemail+email).collection("all chats").addSnapshotListener(new EventListener<QuerySnapshot>() {
+                                @Override
+                                public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                                    for(DocumentChange dc:value.getDocumentChanges()){
+                                        if(dc.getType()==DocumentChange.Type.ADDED){
+                                            chat_ada2.add(dc.getDocument().toObject(MainChatModel.class));
+                                        }
+                                    }
+                                    mchatadapter2.notifyDataSetChanged();
+                                }
+                            });
+                            mchatadapter2=new Main_chat_adapter_2(main_chat_activity.this,chat_ada2);
+                            mchatadapter2.notifyDataSetChanged();
+                            chat_view.setAdapter(mchatadapter2);
+                            mchatadapter2.notifyDataSetChanged();
                             break;
 
                         }
