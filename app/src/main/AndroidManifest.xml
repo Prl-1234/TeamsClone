@@ -26,6 +26,7 @@
         </activity>
         <activity android:name=".WelcomeActivity"></activity>
         <activity android:name=".main_chat_activity"></activity>
+        <activity android:name=".UserProfileActivity"></activity>
         <activity android:name=".ProfileActivity"></activity>
         <activity android:name=".StartCallActivity"></activity>
         <activity android:name=".JoinCallActivity"></activity>

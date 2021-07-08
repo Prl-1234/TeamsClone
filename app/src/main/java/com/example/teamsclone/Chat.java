@@ -103,6 +103,7 @@ public class Chat extends Fragment {
         return view;
     }
     public void adap() {
+       // db.collection("chats").orderBy("time");
         db.collection("chats").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull final Task<QuerySnapshot> task) {
@@ -116,7 +117,7 @@ public class Chat extends Fragment {
                             adapter.notifyDataSetChanged();
                             listView.setAdapter(adapter);
                             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                @Override
+                                    @Override
                                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                                     //String clk = (String) adapter.getItem(i);
                                     String clk=(String) no_list.get(i);

@@ -333,6 +333,14 @@ public class main_chat_activity extends AppCompatActivity {
                                 block.setVisibility(View.VISIBLE);
                             }
                             x=1;
+                            name.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    Intent intent=new Intent(main_chat_activity.this,UserProfileActivity.class);
+                                    intent.putExtra("email",email);
+                                    startActivity(intent);
+                                }
+                            });
 
                             break;
                         }
@@ -357,6 +365,14 @@ public class main_chat_activity extends AppCompatActivity {
                                 block.setVisibility(View.VISIBLE);
                             }
                             x=1;
+                            name.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    Intent intent=new Intent(main_chat_activity.this,UserProfileActivity.class);
+                                    intent.putExtra("email",email);
+                                    startActivity(intent);
+                                }
+                            });
 
                             break;
                         }

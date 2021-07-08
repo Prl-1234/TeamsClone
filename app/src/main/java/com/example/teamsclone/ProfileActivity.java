@@ -38,7 +38,7 @@ public class ProfileActivity extends AppCompatActivity {
     private Button save;
     private TextView change_photo;
     //private EditText name,number;
-    private TextInputEditText name,number;
+    private TextInputEditText name;
     private static final int IMG_REQUEST_ID=10;
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
@@ -68,7 +68,6 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 db.collection("users").document(mAuth.getCurrentUser().getUid()).update("name",name.getText().toString());
-                db.collection("users").document(mAuth.getCurrentUser().getUid()).update("phone",number.getText().toString());
                 Toast.makeText(ProfileActivity.this, "Saved", Toast.LENGTH_SHORT).show();
 
             }
@@ -86,7 +85,6 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 name.setText(task.getResult().getString("name"));
-                number.setText(task.getResult().getString("phone"));
                 Picasso.get().load(Uri.parse(task.getResult().getString("photo"))).into(photo);
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -101,7 +99,6 @@ public class ProfileActivity extends AppCompatActivity {
         photo=findViewById(R.id.photo);
         change_photo=findViewById(R.id.cngphoto);
         name=findViewById(R.id.name);
-        number=findViewById(R.id.number);
         logout=findViewById(R.id.logout);
         save=findViewById(R.id.save);
     }

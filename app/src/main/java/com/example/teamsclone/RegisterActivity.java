@@ -31,13 +31,10 @@ public class RegisterActivity extends AppCompatActivity {
     private Button signUpBtn;
     private EditText mEmail;
     private EditText mUsername;
-    private EditText mpassword,mcpi;
+    private EditText mpassword;
     private String Email,cpi;
     private String Username;
-    private RadioGroup radioGroup,radioGroupBranch;
-    private RadioButton radioButton,radioButtonBranch;
     private String Password;
-    private String type,branch;
     private FirebaseAuth mAuth;
     FirebaseFirestore db;
 
