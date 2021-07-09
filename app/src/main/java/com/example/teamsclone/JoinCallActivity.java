@@ -43,9 +43,10 @@ public class JoinCallActivity extends AppCompatActivity {
     private SurfaceView mLocalView;
     private RelativeLayout mRemoteContainer;
     private SurfaceView mRemoteView;
-    private ImageView btn_call,btn_mute,btn_switch;
+    private ImageView btn_call,btn_mute,btn_switch,video_off;
     private boolean mCallEnd;
     private boolean mMuted;
+    private boolean mVideoOn;
     String channelcode;
     private RtcEngine mRtcEngine;
     private final IRtcEngineEventHandler mRtcEventHandler=new IRtcEngineEventHandler() {
@@ -91,7 +92,7 @@ public class JoinCallActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_startcall);
+        setContentView(R.layout.activity_joincall);
         Intent intent=getIntent();
         channelcode=intent.getStringExtra("channel code");
         initui();
@@ -113,8 +114,19 @@ public class JoinCallActivity extends AppCompatActivity {
     public void onLocalAudioMuteClicked(View view){
         mMuted=!mMuted;
         mRtcEngine.muteLocalAudioStream(mMuted);
-        int res=mMuted?R.drawable.ic_mute:R.drawable.ic_turn_camera;
+        int res=mMuted?R.drawable.ic_unmute:R.drawable.ic_mute;
         btn_mute.setImageResource(res);
+    }
+    public void onVideoOffClicked(View view){
+        mVideoOn=!mVideoOn;
+        if(mVideoOn){
+            mRtcEngine.disableVideo();
+        }
+        else{
+            mRtcEngine.enableVideo();
+        }
+        int res=mVideoOn?R.drawable.ic_video_on:R.drawable.ic_video_off;
+        video_off.setImageResource(res);
     }
     public void onSwitchCamera(View view) {
         mRtcEngine.switchCamera();
@@ -155,13 +167,16 @@ public class JoinCallActivity extends AppCompatActivity {
         int visibility=show?View.VISIBLE:View.GONE;
         btn_mute.setVisibility(visibility);
         btn_switch.setVisibility(visibility);
+        video_off.setVisibility(visibility);
     }
 
     private void initui(){
         mLocalContainer=findViewById(R.id.local_video_view_container);
         mRemoteContainer=findViewById(R.id.remote_video_view_container);
         btn_call=findViewById(R.id.btn_call);
+        video_off=findViewById(R.id.video_off);
         btn_mute=findViewById(R.id.btn_mute);
+        mCallEnd=false;
         btn_switch=findViewById(R.id.switch_camera);
     }
     private void initializeEngine() {

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:keepScreenOn="true"
     android:background="@color/white"
     tools:context=".StartCallActivity">
     <RelativeLayout
@@ -16,7 +17,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="30dp"
-            android:text="Copy meeting code"
+            android:text="Click here to copy meeting code"
             android:layout_marginLeft="10dp"
             android:id="@+id/copy_code"
             android:textSize="20sp"
@@ -71,13 +72,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:layout_marginRight="20dp"
         android:layout_marginBottom="@dimen/control_bottom_margin">
         <ImageView
-            android:layout_width="@dimen/call_button_size"
-            android:layout_height="@dimen/call_button_size"
-            android:layout_centerInParent="true"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:onClick="onCallClicked"
             android:id="@+id/btn_call"
+            android:layout_centerInParent="true"
             android:src="@drawable/ic_endcall"
             android:scaleType="centerCrop"/>
         <ImageView
@@ -92,8 +94,8 @@
             android:src="@drawable/ic_turn_camera"
             android:scaleType="centerCrop"/>
         <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:id="@+id/btn_mute"
             android:layout_toLeftOf="@+id/btn_call"
             android:layout_toStartOf="@+id/btn_call"

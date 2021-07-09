@@ -126,7 +126,7 @@ public class StartCallActivity extends AppCompatActivity {
     public void onLocalAudioMuteClicked(View view){
         mMuted=!mMuted;
         mRtcEngine.muteLocalAudioStream(mMuted);
-        int res=mMuted?R.drawable.ic_mute:R.drawable.ic_turn_camera;
+        int res=mMuted?R.drawable.ic_unmute:R.drawable.ic_mute;
         btn_mute.setImageResource(res);
     }
 
@@ -189,6 +189,7 @@ public class StartCallActivity extends AppCompatActivity {
         btn_mute=findViewById(R.id.btn_mute);
         video_off=findViewById(R.id.video_off);
         btn_switch=findViewById(R.id.switch_camera);
+        mCallEnd=false;
         copycode=findViewById(R.id.copy_code);
         copycode.setOnClickListener(new View.OnClickListener() {
             @Override
