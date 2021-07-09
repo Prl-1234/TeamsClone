@@ -27,47 +27,20 @@
         android:layout_marginTop="50dp"
         android:text="Join a Call"
         android:id="@+id/join_call"/>
-<!--    <TextView-->
-<!--        android:layout_width="300dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="222"-->
-<!--        android:textSize="30sp"-->
-<!--        android:layout_marginTop="40dp"-->
-<!--        android:textAlignment="center"-->
-<!--        android:id="@+id/code"-->
-<!--        android:layout_marginLeft="25dp"-->
-<!--        android:textColor="@color/black"-->
-<!--        android:layout_below="@+id/start_call"-->
-<!--        android:gravity="center_horizontal" />-->
-
-
-<!--    <TextView-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="40dp"-->
-<!--        android:layout_alignParentRight="true"-->
-<!--        android:layout_marginRight="25dp"-->
-<!--        android:layout_marginTop="40dp"-->
-<!--        android:text=" Copy "-->
-<!--        android:id="@+id/copy_code"-->
-<!--        android:background="@color/purple_200"-->
-<!--        android:textSize="30sp"-->
-<!--        android:textAlignment="center"-->
-<!--        android:textColor="@color/black"-->
-<!--        android:layout_below="@+id/start_call"-->
-<!--        android:gravity="center_horizontal" />-->
-
-
 
     <EditText
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter Code to join "
+        android:textColor="@color/black"
         android:textSize="20sp"
+        android:textColorHint="@android:color/darker_gray"
         android:layout_marginTop="40dp"
         android:textAlignment="center"
         android:id="@+id/enter_code"
         android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
         android:layout_below="@+id/start_call"
+        android:hint="Enter Code to join "
         android:gravity="center_horizontal" />
     <Button
         android:layout_width="wrap_content"

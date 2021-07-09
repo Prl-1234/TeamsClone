@@ -49,9 +49,10 @@ public class StartCallActivity extends AppCompatActivity {
     private RelativeLayout mRemoteContainer;
     private SurfaceView mRemoteView;
     private RequestQueue mRequestQueue;
-    private ImageView btn_call,btn_mute,btn_switch;
+    private ImageView btn_call,btn_mute,btn_switch,video_off;
     private boolean mCallEnd;
     private boolean mMuted;
+    private boolean mVideoOn;
     private String channelname,channelcode;
     private TextView copycode;
     private ClipboardManager clipboardManager;
@@ -128,6 +129,18 @@ public class StartCallActivity extends AppCompatActivity {
         int res=mMuted?R.drawable.ic_mute:R.drawable.ic_turn_camera;
         btn_mute.setImageResource(res);
     }
+
+    public void onVideoOffClicked(View view){
+        mVideoOn=!mVideoOn;
+        if(mVideoOn){
+            mRtcEngine.disableVideo();
+        }
+        else{
+            mRtcEngine.enableVideo();
+        }
+        int res=mVideoOn?R.drawable.ic_video_on:R.drawable.ic_video_off;
+        video_off.setImageResource(res);
+    }
     public void onSwitchCamera(View view) {
         mRtcEngine.switchCamera();
     }
@@ -166,6 +179,7 @@ public class StartCallActivity extends AppCompatActivity {
         int visibility=show?View.VISIBLE:View.GONE;
         btn_mute.setVisibility(visibility);
         btn_switch.setVisibility(visibility);
+        video_off.setVisibility(visibility);
     }
 
     private void initui(){
@@ -173,6 +187,7 @@ public class StartCallActivity extends AppCompatActivity {
         mRemoteContainer=findViewById(R.id.remote_video_view_container);
         btn_call=findViewById(R.id.btn_call);
         btn_mute=findViewById(R.id.btn_mute);
+        video_off=findViewById(R.id.video_off);
         btn_switch=findViewById(R.id.switch_camera);
         copycode=findViewById(R.id.copy_code);
         copycode.setOnClickListener(new View.OnClickListener() {
@@ -297,28 +312,6 @@ public class StartCallActivity extends AppCompatActivity {
 
         return true;
     }
-
-
-//    private void initAgoraEngine() {
-//        try {
-//            mRtcEngine = RtcEngine.create(getBaseContext(), getString(R.string.agora_app_id), mRtcEventHandler);
-//        } catch (Exception e) {
-//          //  Log.e(LOG_TAG, Log.getStackTraceString(e));
-//
-//            throw new RuntimeException("NEED TO check rtc sdk init fatal error\n" + Log.getStackTraceString(e));
-//        }
-//        setupSession();
-//    }
-//    private void setupSession() {
-//        mRtcEngine.setChannelProfile(Constants.CHANNEL_PROFILE_COMMUNICATION);
-//
-//        mRtcEngine.enableVideo();
-//
-//        mRtcEngine.setVideoEncoderConfiguration(new VideoEncoderConfiguration(VideoEncoderConfiguration.VD_1920x1080, VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_30,
-//                VideoEncoderConfiguration.STANDARD_BITRATE,
-//                VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_FIXED_PORTRAIT));
-//    }
-
 
 
 }

@@ -146,7 +146,6 @@ public class main_chat_activity extends AppCompatActivity {
                                                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                                     myname[0] =task.getResult().getString("name");
                                                     p2[0]=task.getResult().getString("photo");
-                                                    Toast.makeText(main_chat_activity.this, myname[0], Toast.LENGTH_SHORT).show();
                                                     db.collection("users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                                         @Override
                                                         public void onComplete(@NonNull Task<QuerySnapshot> task) {

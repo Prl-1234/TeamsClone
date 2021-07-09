@@ -118,6 +118,7 @@ public class ProfileActivity extends AppCompatActivity {
             uri=data.getData();
             Picasso.get().load(uri).into(photo);
             photo.setImageURI(uri);
+            Toast.makeText(this, "Uploading...", Toast.LENGTH_SHORT).show();
             final StorageReference reference=storage.child("pictures").child(mAuth.getCurrentUser().getUid().toString());
             try{
                 reference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {

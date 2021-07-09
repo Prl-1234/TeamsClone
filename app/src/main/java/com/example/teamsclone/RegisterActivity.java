@@ -1,6 +1,7 @@
 package com.example.teamsclone;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -23,6 +24,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -35,6 +39,7 @@ public class RegisterActivity extends AppCompatActivity {
     private String Email,cpi;
     private String Username;
     private String Password;
+    private StorageReference storage;
     private FirebaseAuth mAuth;
     FirebaseFirestore db;
 
@@ -48,14 +53,11 @@ public class RegisterActivity extends AppCompatActivity {
         mEmail=(EditText) findViewById(R.id.email);
         mUsername=(EditText) findViewById(R.id.name);
         mpassword=(EditText) findViewById(R.id.password);
+        storage = FirebaseStorage.getInstance().getReference();
 
         signUpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Intent intent=new Intent(LoginActivity.this,MainActivity.class);
-//                startActivity(intent);
-//                finish();
-
                 Email=mEmail.getText().toString();
                 Password=mpassword.getText().toString();
                 Username=mUsername.getText().toString();
@@ -76,10 +78,6 @@ public class RegisterActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
-                                Toast.makeText(RegisterActivity.this, "Sending Verification link", Toast.LENGTH_SHORT).show();
-                                Intent intent=new Intent(RegisterActivity.this,LoginActivity.class);
-                                startActivity(intent);
-                                finish();
                                 FirebaseUser new_user = mAuth.getCurrentUser();
                                 if(new_user!=null){
                                     final String user_id=new_user.getUid();
@@ -88,28 +86,18 @@ public class RegisterActivity extends AppCompatActivity {
                                                 @Override
                                                 public void onComplete(@NonNull Task<Void> task) {
                                                     if(task.isSuccessful()){
-                                                          // Toast.makeText(RegisterActivity.this, "Verified", Toast.LENGTH_SHORT).show();
-                                                        Map<String, Object> user = new HashMap<>();
-                                                        user.put("email", email);
-                                                        user.put("name", name);
-                                                        user.put("user_id",user_id);
-                                                        user.put("phone","");
-                                                        user.put("photo","");
-                                                        db.collection("users").document(user_id).set(user);
-//                                                        db.collection("users")
-//                                                                .add(user)
-//                                                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-//                                                                    @Override
-//                                                                    public void onSuccess(DocumentReference documentReference) {
-//                                                                      //  Toast.makeText(RegisterActivity.this, "Added", Toast.LENGTH_LONG).show();
-//                                                                    }
-//                                                                })
-//                                                                .addOnFailureListener(new OnFailureListener() {
-//                                                                    @Override
-//                                                                    public void onFailure(@NonNull Exception e) {
-//
-//                                                                    }
-//                                                                });
+                                                        final StorageReference reference=storage.child("profile.png");
+                                                        reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                                            @Override
+                                                            public void onSuccess(Uri uri) {
+                                                                Map<String, Object> user = new HashMap<>();
+                                                                user.put("photo",uri.toString());
+                                                                user.put("email", email);
+                                                                user.put("name", name);
+                                                                user.put("user_id",user_id);
+                                                                db.collection("users").document(user_id).set(user);
+                                                            }
+                                                        });
 
                                                     }
                                                     else{
@@ -118,6 +106,10 @@ public class RegisterActivity extends AppCompatActivity {
                                                 }
                                             });
                                 }
+                                Toast.makeText(RegisterActivity.this, "Sending Verification link", Toast.LENGTH_SHORT).show();
+                                Intent intent=new Intent(RegisterActivity.this,LoginActivity.class);
+                                startActivity(intent);
+                                finish();
                             } else {
                                 // If sign in fails, display a message to the user.
                                 Toast.makeText(RegisterActivity.this, "Failed Authentication", Toast.LENGTH_SHORT).show();

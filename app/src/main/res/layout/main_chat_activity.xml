@@ -24,8 +24,7 @@
             android:id="@+id/user_image"
             android:layout_marginLeft="4dp"
             android:layout_toRightOf="@+id/back_from_chat"
-            android:layout_height="match_parent"
-            android:src="@mipmap/ic_launcher" />
+            android:layout_height="match_parent" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_marginLeft="8dp"
@@ -35,7 +34,7 @@
             android:layout_centerVertical="true"
             android:textColor="@android:color/black"
             android:id="@+id/name_chat_act"
-            android:text="Name here"
+            android:text=""
             />
         <ImageView
             android:layout_width="34dp"

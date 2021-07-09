@@ -88,7 +88,6 @@ public class JoinCallActivity extends AppCompatActivity {
         }
     };
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -150,6 +149,7 @@ public class JoinCallActivity extends AppCompatActivity {
             mLocalContainer.removeView(mLocalView);
         }
         mLocalView=null;
+        mRtcEngine.disableVideo();
     }
     private void showButtons(boolean show){
         int visibility=show?View.VISIBLE:View.GONE;
@@ -257,28 +257,5 @@ public class JoinCallActivity extends AppCompatActivity {
 
         return true;
     }
-
-
-//    private void initAgoraEngine() {
-//        try {
-//            mRtcEngine = RtcEngine.create(getBaseContext(), getString(R.string.agora_app_id), mRtcEventHandler);
-//        } catch (Exception e) {
-//          //  Log.e(LOG_TAG, Log.getStackTraceString(e));
-//
-//            throw new RuntimeException("NEED TO check rtc sdk init fatal error\n" + Log.getStackTraceString(e));
-//        }
-//        setupSession();
-//    }
-//    private void setupSession() {
-//        mRtcEngine.setChannelProfile(Constants.CHANNEL_PROFILE_COMMUNICATION);
-//
-//        mRtcEngine.enableVideo();
-//
-//        mRtcEngine.setVideoEncoderConfiguration(new VideoEncoderConfiguration(VideoEncoderConfiguration.VD_1920x1080, VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_30,
-//                VideoEncoderConfiguration.STANDARD_BITRATE,
-//                VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_FIXED_PORTRAIT));
-//    }
-
-
 
 }

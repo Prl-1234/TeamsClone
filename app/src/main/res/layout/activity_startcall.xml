@@ -4,19 +4,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".StartCallActivity">
     <RelativeLayout
         android:layout_width="match_parent"
         android:id="@+id/top_bar"
+        android:backgroundTint="@color/lightGray"
         android:background="@color/white"
         android:layout_height="35dp"
         >
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
             android:text="Copy meeting code"
+            android:layout_marginLeft="10dp"
             android:id="@+id/copy_code"
-            android:textSize="25sp"
+            android:textSize="20sp"
+            android:paddingTop="5dp"
             android:textColor="@color/black"/>
     </RelativeLayout>
 
@@ -31,10 +35,10 @@
            android:layout_height="match_parent"
            android:layout_above="@+id/iconpadding">
            <ImageView
-               android:layout_width="@dimen/remote_back_icon_size"
-               android:layout_height="@dimen/remote_back_icon_size"
+               android:layout_width="250dp"
+               android:layout_height="250dp"
                android:layout_centerInParent="true"
-               android:src="@drawable/ic_pick"/>
+               android:src="@drawable/nouser"/>
        </RelativeLayout>
        <RelativeLayout
            android:layout_width="match_parent"
@@ -53,8 +57,8 @@
         android:layout_alignParentTop="true"
         android:layout_marginEnd="@dimen/local_preview_margin_right"
         android:layout_marginRight="@dimen/local_preview_margin_right"
-        android:layout_marginTop="35dp"
-        android:background="@color/teal_200"
+        android:layout_marginTop="38dp"
+        android:background="@color/black"
         >
         <ImageView
             android:layout_width="@dimen/local_back_icon_size"
@@ -77,8 +81,8 @@
             android:src="@drawable/ic_endcall"
             android:scaleType="centerCrop"/>
         <ImageView
-            android:layout_width="@dimen/other_button_size"
-            android:layout_height="@dimen/other_button_size"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:id="@+id/switch_camera"
             android:layout_toRightOf="@+id/btn_call"
             android:layout_toEndOf="@+id/btn_call"
@@ -88,8 +92,8 @@
             android:src="@drawable/ic_turn_camera"
             android:scaleType="centerCrop"/>
         <ImageView
-            android:layout_width="@dimen/other_button_size"
-            android:layout_height="@dimen/other_button_size"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:id="@+id/btn_mute"
             android:layout_toLeftOf="@+id/btn_call"
             android:layout_toStartOf="@+id/btn_call"
@@ -98,6 +102,17 @@
             android:layout_centerVertical="true"
             android:scaleType="centerCrop"
             android:onClick="onLocalAudioMuteClicked"/>
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:id="@+id/video_off"
+            android:layout_toRightOf="@+id/switch_camera"
+            android:layout_toEndOf="@+id/switch_camera"
+            android:layout_marginLeft="@dimen/control_bottom_horizontal_margin"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_video_off"
+            android:onClick="onVideoOffClicked"
+            android:scaleType="centerCrop"/>
 
     </RelativeLayout>
 
