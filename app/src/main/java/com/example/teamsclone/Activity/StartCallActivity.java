@@ -1,4 +1,4 @@
-package com.example.teamsclone;
+package com.example.teamsclone.Activity;
 
 import android.Manifest;
 import android.content.ClipData;
@@ -27,6 +27,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.teamsclone.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -57,6 +58,10 @@ public class StartCallActivity extends AppCompatActivity {
     private TextView copycode;
     private ClipboardManager clipboardManager;
     private RtcEngine mRtcEngine;
+
+    /**
+     * mRTCEventHandler to handle request of joining channel, changed state
+     */
     private final IRtcEngineEventHandler mRtcEventHandler=new IRtcEngineEventHandler() {
         @Override
         public void onJoinChannelSuccess(String channel, int uid, int elapsed) {
@@ -123,6 +128,11 @@ public class StartCallActivity extends AppCompatActivity {
         }
         RtcEngine.destroy();
     }
+
+    /**
+     * OnClickListener when mute/unmute is clicked.
+     * @param view
+     */
     public void onLocalAudioMuteClicked(View view){
         mMuted=!mMuted;
         mRtcEngine.muteLocalAudioStream(mMuted);
@@ -130,6 +140,10 @@ public class StartCallActivity extends AppCompatActivity {
         btn_mute.setImageResource(res);
     }
 
+    /**
+     * OnClickListener when video off is clicked.
+     * @param view
+     */
     public void onVideoOffClicked(View view){
         mVideoOn=!mVideoOn;
         if(mVideoOn){
@@ -141,10 +155,19 @@ public class StartCallActivity extends AppCompatActivity {
         int res=mVideoOn?R.drawable.ic_video_on:R.drawable.ic_video_off;
         video_off.setImageResource(res);
     }
+
+    /**
+     * OnClickListener when switch camera is clicked.
+     * @param view
+     */
     public void onSwitchCamera(View view) {
         mRtcEngine.switchCamera();
     }
 
+    /**
+     * OnClickListener when call/end button is clicked.
+     * @param view
+     */
     public void onCallClicked(View view) {
         if(mCallEnd){
             startCall();
@@ -175,6 +198,11 @@ public class StartCallActivity extends AppCompatActivity {
         }
         mLocalView=null;
     }
+    /**
+     * Mute, Video off, switch camera buttons
+     * to show/hide on calling/end calling.
+     * @param show
+     */
     private void showButtons(boolean show){
         int visibility=show?View.VISIBLE:View.GONE;
         btn_mute.setVisibility(visibility);
@@ -182,6 +210,9 @@ public class StartCallActivity extends AppCompatActivity {
         video_off.setVisibility(visibility);
     }
 
+    /**
+     * Initialize the UI
+     */
     private void initui(){
         mLocalContainer=findViewById(R.id.local_video_view_container);
         mRemoteContainer=findViewById(R.id.remote_video_view_container);
@@ -200,6 +231,10 @@ public class StartCallActivity extends AppCompatActivity {
             }
         });
     }
+
+    /**
+     * Initializing mRTC Engine.
+     */
     private void initializeEngine() {
         try {
             mRtcEngine = RtcEngine.create(getBaseContext(), getString(R.string.agora_app_id), mRtcEventHandler);
@@ -208,6 +243,7 @@ public class StartCallActivity extends AppCompatActivity {
             throw new RuntimeException("NEED TO check rtc sdk init fatal error\n" + Log.getStackTraceString(e));
         }
     }
+
     private void setUpVideoConfig(){
         mRtcEngine.enableVideo();
         mRtcEngine.setVideoEncoderConfiguration(new VideoEncoderConfiguration(VideoEncoderConfiguration.VD_640x360,
@@ -215,6 +251,7 @@ public class StartCallActivity extends AppCompatActivity {
                 VideoEncoderConfiguration.STANDARD_BITRATE,
                 VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_FIXED_PORTRAIT));
     }
+
     private void setupLocalVideo() {
 
         // Enable the video module.
@@ -228,11 +265,9 @@ public class StartCallActivity extends AppCompatActivity {
         VideoCanvas localVideoCanvas = new VideoCanvas(mLocalView, VideoCanvas.RENDER_MODE_HIDDEN, 0);
         mRtcEngine.setupLocalVideo(localVideoCanvas);
     }
+
     private void joinChannel() {
 
-        // Join a channel with a token.
-//        mRtcEngine.joinChannel("00624d90b7061a24ef28ff84d5947d46ad6IADLdHcPwaB+T6WM0rxWLZ6St477aJuw7trqYNTJdsy1kKDfQtYAAAAAEACqPfBqMijTYAEAAQAyKNNg",
-//                "demo", "", 0);
         String url = "https://teamscloone.herokuapp.com/access_token?channel="+channelname;
 
         final JsonObjectRequest request=new JsonObjectRequest(Request.Method.GET,url,null,new Response.Listener<JSONObject>(){
@@ -262,6 +297,7 @@ public class StartCallActivity extends AppCompatActivity {
         setupLocalVideo();
         joinChannel();
     }
+
     private void setupRemoteVideo(int uid) {
         int count=mRemoteContainer.getChildCount();
         View view=null;
@@ -281,7 +317,7 @@ public class StartCallActivity extends AppCompatActivity {
         mRemoteView.setTag(uid);
 
     }
-    //@NonNull @org.jetbrains.annotations.NotNull
+
     @Override
     public void onRequestPermissionsResult(int requestCode,@NonNull  String[] permissions,@NonNull  int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -297,6 +333,9 @@ public class StartCallActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Removes remote video from screen if user is has end the call.
+     */
     private void removeRemoteVideo() {
         if(mRemoteView!=null){
             mRemoteContainer.removeView(mRemoteView);

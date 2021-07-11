@@ -41,6 +41,7 @@
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
             android:src="@drawable/ic_block"
+            app:tint="@color/green"
             android:id="@+id/block_chat"
             />
         <ImageView
@@ -48,8 +49,7 @@
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
             android:src="@drawable/ic_block"
-            android:id="@+id/unblock_chat"
-            app:tint="@color/green" />
+            android:id="@+id/unblock_chat"/>
     </RelativeLayout>
     <RelativeLayout
         android:layout_width="match_parent"

@@ -1,11 +1,10 @@
-package com.example.teamsclone;
+package com.example.teamsclone.Activity;
 
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -14,33 +13,34 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.teamsclone.Login.LoginActivity;
+import com.example.teamsclone.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class ProfileActivity extends AppCompatActivity {
     private ImageView photo,logout;
     private Button save;
     private TextView change_photo;
-    //private EditText name,number;
     private TextInputEditText name;
     private static final int IMG_REQUEST_ID=10;
     private FirebaseAuth mAuth;
+    private String myemail;
     private FirebaseFirestore db;
     private StorageReference storage;
     private Uri uri;
@@ -52,7 +52,7 @@ public class ProfileActivity extends AppCompatActivity {
         mAuth=FirebaseAuth.getInstance();
 
         storage = FirebaseStorage.getInstance().getReference();
-       db=FirebaseFirestore.getInstance();
+        db=FirebaseFirestore.getInstance();
         initUi();
         setUpInitialDetails();
         logout.setOnClickListener(new View.OnClickListener() {
@@ -60,7 +60,7 @@ public class ProfileActivity extends AppCompatActivity {
             public void onClick(View view) {
                 mAuth.signOut();
                 Toast.makeText(ProfileActivity.this, "Logged out successfully", Toast.LENGTH_SHORT).show();
-                Intent intent=new Intent(ProfileActivity.this,LoginActivity.class);
+                Intent intent=new Intent(ProfileActivity.this, LoginActivity.class);
                 startActivity(intent);
             }
         });
@@ -85,6 +85,7 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 name.setText(task.getResult().getString("name"));
+                myemail=task.getResult().getString("email");
                 Picasso.get().load(Uri.parse(task.getResult().getString("photo"))).into(photo);
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -130,6 +131,34 @@ public class ProfileActivity extends AppCompatActivity {
                             public void onSuccess(Uri uri) {
                                 final Uri firebaseUri = uri;
                                 db.collection("users").document(mAuth.getCurrentUser().getUid()).update("photo", firebaseUri.toString());
+                                db.collection("chats")
+                                        .get()
+                                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                if (task.isSuccessful()) {
+                                                    int x=0;
+                                                    for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+                                                        if((documentSnapshot.getString("us2").equals(myemail))){
+                                                            x=1;
+                                                            db.collection("chats").document(documentSnapshot.getId()).update("p2",firebaseUri.toString());
+                                                            break;
+                                                        }
+                                                    }
+                                                    x=0;
+                                                    if(x==0){
+                                                        for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+                                                            if((documentSnapshot.getString("us1").equals(myemail))){
+                                                                x=1;
+                                                                db.collection("chats").document(documentSnapshot.getId()).update("p1",firebaseUri.toString());
+                                                                break;
+                                                            }
+                                                        }
+                                                    }
+
+                                                }
+                                            }
+                                        });
                                 Toast.makeText(ProfileActivity.this, "Uploaded", Toast.LENGTH_SHORT).show();
                             }
                         });

@@ -1,8 +1,6 @@
 package com.example.teamsclone;
 
 import android.content.Intent;
-import android.net.Uri;
-import android.opengl.ETC1;
 import android.os.Bundle;
 import android.util.Pair;
 import android.view.LayoutInflater;
@@ -18,16 +16,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.teamsclone.Activity.main_chat_activity;
+import com.example.teamsclone.Adapter.Chat_list_adapter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -53,11 +51,12 @@ public class Chat extends Fragment {
         searchbar=(EditText) view.findViewById(R.id.search_text);
         search=(ImageView) view.findViewById(R.id.search);
 
+        //Getting my details and setting up chat users
         db.collection("users").document(mAuth.getCurrentUser().getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 myemail=(task.getResult().getString("email"));
-                adap();
+                SetUpChatListOfUser();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -65,106 +64,100 @@ public class Chat extends Fragment {
                 Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
             }
         });
+
+
+        //Search if searched user has been registered on our app
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                    x=0;
-                    final String number=searchbar.getText().toString();
-                    //  Toast.makeText(MainActivity.this, "e"+number+mynumber, Toast.LENGTH_LONG).show();
-                    if(!number.equals(myemail)&&number.length()!=0){
-                      //  DocumentReference docIdRef = db.collection("users").document(number);
-                        db.collection("users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull  Task<QuerySnapshot> task) {
-                                if (task.isSuccessful()) {
-                                    QuerySnapshot document = task.getResult();
-                                    boolean exists=false;
-                                    for(DocumentSnapshot documentSnapshot:document){
-                                        if(documentSnapshot.getString("email").equals(number)){
-                                            Intent intent=new Intent(getContext(),main_chat_activity.class);
-                                            intent.putExtra("email",number);
-                                            startActivity(intent);
-                                            exists=true;
-                                            break;
-                                        }
-                                    }
-                                    if(!exists){
-                                        Toast.makeText(getContext(), "User is not registered", Toast.LENGTH_SHORT).show();
-                                    }
-                                } else {
-                                    Toast.makeText(getContext(), "error", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
-                    }
+                x=0;
+                final String number=searchbar.getText().toString();
 
+                if(!number.equals(myemail)&&number.length()!=0){
+                    db.collection("users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull  Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                QuerySnapshot document = task.getResult();
+                                boolean exists=false;
+                                for(DocumentSnapshot documentSnapshot:document){
+                                    if(documentSnapshot.getString("email").equals(number)){
+                                        Intent intent=new Intent(getContext(), main_chat_activity.class);
+                                        intent.putExtra("email",number);
+                                        startActivity(intent);
+                                        exists=true;
+                                        break;
+                                    }
+                                }
+                                if(!exists){
+                                    Toast.makeText(getContext(), "User is not registered", Toast.LENGTH_SHORT).show();
+                                }
+                            } else {
+                                Toast.makeText(getContext(), "error", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                }
             }
         });
+
         return view;
     }
-    public void adap() {
-        db.collection("chats").orderBy("time");
+
+    /**
+     * Checks if logged in user is user1
+     * or user2 in firebase "chats" node
+     * and sends appropriate result to setUpAdapter().
+     */
+    public void SetUpChatListOfUser() {
         db.collection("chats").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull final Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
+                    //If the chat user is set as user1 in database
                     int x = 0;
                     for (final QueryDocumentSnapshot document : task.getResult()) {
                         if (document.getString("us2").equals(myemail)) {
                             chat_list.add(new Pair <String,String> (document.getString("name1"), document.getString("p1")));
                             no_list.add(document.getString("us1"));
-                            adapter = new Chat_list_adapter(getContext(), chat_list);
-                            adapter.notifyDataSetChanged();
-                            listView.setAdapter(adapter);
-                            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                    @Override
-                                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                                    //String clk = (String) adapter.getItem(i);
-                                    String clk=(String) no_list.get(i);
-                                    Intent intent = new Intent(getContext(), main_chat_activity.class);
-                                    intent.putExtra("email", clk);
-                                    startActivity(intent);
-                                }
-                            });
-                            adapter.notifyDataSetChanged();
-                            //    mynumber = document.getString("name1");
-                           // break;
+                            SetUpAdapter();
                         }
-
                     }
+                    //If the chat user is set as user2 in database
                     x=0;
                     if(x==0){
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             if (document.getString("us1").equals(myemail)) {
                                 chat_list.add(new Pair <String,String> (document.getString("name2"), document.getString("p2")));
                                 no_list.add(document.getString("us2"));
-                                adapter = new Chat_list_adapter(getContext(), chat_list);
-                                adapter.notifyDataSetChanged();
-                                listView.setAdapter(adapter);
-                                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                    @Override
-                                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                                        //   String clk = (String) adapter.getItem(i);
-                                        String clk=(String) no_list.get(i);
-                                        Intent intent = new Intent(getContext(), main_chat_activity.class);
-                                        intent.putExtra("email", clk);
-                                        startActivity(intent);
-                                    }
-                                });
-                                x = 1;
-                                adapter.notifyDataSetChanged();
-                                //   mynumber = document.getString("name1");
-                              //  break;
-                            }
+                                SetUpAdapter();
 
+                            }
                         }
                     }
-
-                }
-                else {
-
                 }
             }
         });
+    }
+
+    /**
+     * Sets up all the chats the logged in user has ever messaged to.
+     */
+    private void SetUpAdapter(){
+        adapter = new Chat_list_adapter(getContext(), chat_list);
+        adapter.notifyDataSetChanged();
+        listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                //   String clk = (String) adapter.getItem(i);
+                String clk=(String) no_list.get(i);
+                Intent intent = new Intent(getContext(), main_chat_activity.class);
+                intent.putExtra("email", clk);
+                startActivity(intent);
+            }
+        });
+        x = 1;
+        adapter.notifyDataSetChanged();
     }
 }

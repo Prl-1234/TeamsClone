@@ -1,4 +1,4 @@
-package com.example.teamsclone;
+package com.example.teamsclone.Login;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +13,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.teamsclone.R;
+import com.example.teamsclone.Activity.WelcomeActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -29,7 +31,6 @@ public class LoginActivity extends AppCompatActivity {
     private TextView register;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         Log.d("login activity","login");
         setContentView(R.layout.activity_login);
@@ -39,14 +40,14 @@ public class LoginActivity extends AppCompatActivity {
         mpassword=(EditText) findViewById(R.id.password);
         register=(TextView) findViewById(R.id.create);
         if(mAuth.getCurrentUser()!=null&&mAuth.getCurrentUser().isEmailVerified()){
-            Intent intent=new Intent(LoginActivity.this,WelcomeActivity.class);
+            Intent intent=new Intent(LoginActivity.this, WelcomeActivity.class);
             startActivity(intent);
             finish();
         }
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(LoginActivity.this,RegisterActivity.class);
+                Intent intent=new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivity(intent);
                 finish();
             }
@@ -54,54 +55,54 @@ public class LoginActivity extends AppCompatActivity {
         signinBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Intent intent=new Intent(LoginActivity.this,MainActivity.class);
-//                startActivity(intent);
-//                finish();
                 Email=mEmail.getText().toString();
                 Password=mpassword.getText().toString();
                 setUpFirebase(Email,Password);
             }
         });
     }
+
+    /**
+     *
+     *  Takes in input email and password from user
+     *  and send user to WelcomeActivity
+     *  if user is registered and verified.
+     * @param email
+     * @param password
+     */
     private void setUpFirebase(String email,String password){
         if(email.equals("")||password.equals("")){
             Toast.makeText(LoginActivity.this, "Enter all fields", Toast.LENGTH_SHORT).show();
         }
         else{
             mAuth.signInWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (!task.isSuccessful()) {
+                            Toast.makeText(LoginActivity.this, "Failed To Authenticate", Toast.LENGTH_SHORT).show();
+                        } else {
+                            FirebaseUser user=mAuth.getCurrentUser();
+                            try {
+                                if(user.isEmailVerified()){
 
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (!task.isSuccessful()) {
-                                Toast.makeText(LoginActivity.this, "Failed To Authenticate", Toast.LENGTH_SHORT).show();
-                            } else {
-                                FirebaseUser user=mAuth.getCurrentUser();
-                                try {
-                                    if(user.isEmailVerified()){
-
-                                        Intent intent=new Intent(LoginActivity.this,WelcomeActivity.class);
-                                        startActivity(intent);
-                                        finish();
-                                    }
-                                    else{
-                                        Toast.makeText(LoginActivity.this, "Email is not verified", Toast.LENGTH_SHORT).show();
-                                        mAuth.signOut();
-                                    }
-                                }catch (NullPointerException e){
-
+                                    Intent intent=new Intent(LoginActivity.this,WelcomeActivity.class);
+                                    startActivity(intent);
+                                    finish();
                                 }
+                                else{
+                                    Toast.makeText(LoginActivity.this, "Email is not verified", Toast.LENGTH_SHORT).show();
+                                    mAuth.signOut();
+                                }
+                            }catch (NullPointerException e){
 
                             }
+
                         }
-                    });
+                    }
+                });
         }
 
     }
 
-//    @Override
-//    protected void onStart() {
-//        super.onStart();
-//
-//    }
 }

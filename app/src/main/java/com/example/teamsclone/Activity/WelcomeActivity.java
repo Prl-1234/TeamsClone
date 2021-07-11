@@ -1,20 +1,15 @@
-package com.example.teamsclone;
+package com.example.teamsclone.Activity;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
-import com.android.volley.toolbox.Volley;
+import com.example.teamsclone.Call;
+import com.example.teamsclone.Chat;
+import com.example.teamsclone.R;
+import com.example.teamsclone.Adapter.SectionPagerAdapter;
 import com.google.android.material.tabs.TabLayout;
-import com.google.firebase.auth.FirebaseAuth;
 
 public class WelcomeActivity extends AppCompatActivity {
 

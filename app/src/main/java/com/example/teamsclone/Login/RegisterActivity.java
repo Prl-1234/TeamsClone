@@ -1,32 +1,27 @@
-package com.example.teamsclone;
+package com.example.teamsclone.Login;
 
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.teamsclone.R;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -43,6 +38,11 @@ public class RegisterActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     FirebaseFirestore db;
 
+    /**
+     * Setting Up UI and onClickListeners to signInButton
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,7 +67,15 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-
+    /**
+     * Takes in input email, password and name.
+     * Registers user in appropriate node in firebase.
+     * Sends Verification mail to registered email-id.
+     *
+     * @param email
+     * @param password
+     * @param name
+     */
     private void setUpFirebase(final String email, final   String password, final   String name){
         if(email.equals("")||password.equals("")){
             Toast.makeText(RegisterActivity.this, "Fill all fields", Toast.LENGTH_SHORT).show();
@@ -107,15 +115,13 @@ public class RegisterActivity extends AppCompatActivity {
                                             });
                                 }
                                 Toast.makeText(RegisterActivity.this, "Sending Verification link", Toast.LENGTH_SHORT).show();
-                                Intent intent=new Intent(RegisterActivity.this,LoginActivity.class);
+                                Intent intent=new Intent(RegisterActivity.this, LoginActivity.class);
                                 startActivity(intent);
                                 finish();
                             } else {
                                 // If sign in fails, display a message to the user.
                                 Toast.makeText(RegisterActivity.this, "Failed Authentication", Toast.LENGTH_SHORT).show();
                             }
-
-                            // ...
                         }
                     });
         }

@@ -1,4 +1,4 @@
-package com.example.teamsclone;
+package com.example.teamsclone.Adapter;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;

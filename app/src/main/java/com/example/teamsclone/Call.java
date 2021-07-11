@@ -14,6 +14,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.teamsclone.Activity.JoinCallActivity;
+import com.example.teamsclone.Activity.ProfileActivity;
+import com.example.teamsclone.Activity.StartCallActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class Call extends Fragment {
@@ -41,7 +44,7 @@ public class Call extends Fragment {
             public void onClick(View view) {
                 join_final_call.setVisibility(View.GONE);
                 enter_code.setVisibility(View.GONE);
-                Intent intent=new Intent(getActivity(),StartCallActivity.class);
+                Intent intent=new Intent(getActivity(), StartCallActivity.class);
                 intent.putExtra("channel", FirebaseAuth.getInstance().getCurrentUser().getUid());
                 startActivity(intent);
             }
@@ -60,16 +63,17 @@ public class Call extends Fragment {
                     Toast.makeText(getActivity(), "Enter Valid Code", Toast.LENGTH_SHORT).show();
                 }
                 else{
-                    Intent intent=new Intent(getActivity(),JoinCallActivity.class);
+                    Intent intent=new Intent(getActivity(), JoinCallActivity.class);
                     intent.putExtra("channel code", enter_code.getText().toString());
                     startActivity(intent);
+                    enter_code.setText("");
                 }
             }
         });
         profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(getActivity(),ProfileActivity.class);
+                Intent intent=new Intent(getActivity(), ProfileActivity.class);
                 startActivity(intent);
             }
         });

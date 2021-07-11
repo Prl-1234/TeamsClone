@@ -17,20 +17,20 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TeamsClone">
-        <activity android:name=".LoginActivity">
+        <activity android:name=".Login.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".WelcomeActivity"></activity>
-        <activity android:name=".main_chat_activity"></activity>
-        <activity android:name=".UserProfileActivity"></activity>
-        <activity android:name=".ProfileActivity"></activity>
-        <activity android:name=".StartCallActivity"></activity>
-        <activity android:name=".JoinCallActivity"></activity>
-        <activity android:name=".RegisterActivity"></activity>
+        <activity android:name=".Activity.WelcomeActivity"></activity>
+        <activity android:name=".Activity.main_chat_activity"></activity>
+        <activity android:name=".Activity.UserProfileActivity"></activity>
+        <activity android:name=".Activity.ProfileActivity"></activity>
+        <activity android:name=".Activity.StartCallActivity"></activity>
+        <activity android:name=".Activity.JoinCallActivity"></activity>
+        <activity android:name=".Login.RegisterActivity"></activity>
     </application>
 
 </manifest>

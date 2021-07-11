@@ -1,4 +1,4 @@
-package com.example.teamsclone;
+package com.example.teamsclone.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +9,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.teamsclone.Login.LoginActivity;
+import com.example.teamsclone.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -28,7 +30,7 @@ public class SignOutActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 mAuth.signOut();
-                Intent intent=new Intent(SignOutActivity.this,LoginActivity.class);
+                Intent intent=new Intent(SignOutActivity.this, LoginActivity.class);
                 startActivity(intent);
                 finish();
             }

@@ -1,4 +1,4 @@
-package com.example.teamsclone;
+package com.example.teamsclone.Adapter;
 
 import android.app.Activity;
 import android.content.Context;
@@ -7,11 +7,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.teamsclone.MainChatModel;
+import com.example.teamsclone.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -24,13 +27,13 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
 
-public class Main_chat_adapter_2 extends ArrayAdapter<MainChatModel> {
+public class Main_chat_adapter extends ArrayAdapter<MainChatModel> {
     private LayoutInflater mInflater;
     private int layoutResource;
     FirebaseFirestore db;
     private Context mContext;
 
-    public Main_chat_adapter_2(@NonNull Context context, @NonNull ArrayList<MainChatModel> objects) {
+    public Main_chat_adapter(@NonNull Context context, @NonNull ArrayList<MainChatModel> objects) {
         super(context, 0, objects);
     }
 
@@ -42,11 +45,12 @@ public class Main_chat_adapter_2 extends ArrayAdapter<MainChatModel> {
         }
 
         final TextView one_chat=(TextView) convertView.findViewById(R.id.chat_personal);
+        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)one_chat.getLayoutParams();
 
         String talk=getItem(position).getTalk();
         one_chat.setText(talk);
         db=FirebaseFirestore.getInstance();
-       db.collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        db.collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
            @Override
            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                String myemail ;
@@ -54,6 +58,8 @@ public class Main_chat_adapter_2 extends ArrayAdapter<MainChatModel> {
                if(getItem(position).getUser().equals(myemail)){
                    one_chat.setBackgroundResource(R.color.white);
                    one_chat.setGravity(Gravity.RIGHT);
+                   params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                   one_chat.setLayoutParams(params);
                }
                else{
                    one_chat.setBackgroundResource(R.color.lightPurple);
@@ -61,7 +67,7 @@ public class Main_chat_adapter_2 extends ArrayAdapter<MainChatModel> {
 
                }
            }
-       });
+        });
 
 
         return convertView;

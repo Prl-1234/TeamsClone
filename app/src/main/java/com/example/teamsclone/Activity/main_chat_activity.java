@@ -1,4 +1,4 @@
-package com.example.teamsclone;
+package com.example.teamsclone.Activity;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -14,6 +14,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.teamsclone.Adapter.Main_chat_adapter;
+import com.example.teamsclone.MainChatModel;
+import com.example.teamsclone.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -41,7 +44,7 @@ public class main_chat_activity extends AppCompatActivity {
     EditText write_msg;
     FirebaseAuth mAuth;
     FirebaseFirestore db;
-    Main_chat_adapter_2 mchatadapter2;
+    Main_chat_adapter mchatadapter2;
     ImageView user_image;
     ArrayList<MainChatModel> chat_ada2;
     @Override
@@ -55,10 +58,12 @@ public class main_chat_activity extends AppCompatActivity {
         unblock=(ImageView) findViewById(R.id.unblock_chat);
         block.setVisibility(View.GONE);
         unblock.setVisibility(View.GONE);
+
+        // Go to welcome activity
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(main_chat_activity.this,WelcomeActivity.class);
+                Intent intent=new Intent(main_chat_activity.this, WelcomeActivity.class);
                 startActivity(intent);
                 finish();
             }
@@ -220,9 +225,7 @@ public class main_chat_activity extends AppCompatActivity {
                                     db.collection("chats")
                                         .document(email+myemail)
                                         .update("block by 2",true);
-                                    block.setVisibility(View.GONE);
-                                    unblock.setVisibility(View.VISIBLE);
-                                    send.setVisibility(View.GONE);
+                                    SettingVisibilityOfBlock();
 
                                     x=1;
 
@@ -235,11 +238,9 @@ public class main_chat_activity extends AppCompatActivity {
                                 )) {
 
                                     db.collection("chats")
-                                            .document(email+myemail)
+                                            .document(myemail+email)
                                             .update("block by 1",true);
-                                    block.setVisibility(View.GONE);
-                                    unblock.setVisibility(View.VISIBLE);
-                                    send.setVisibility(View.GONE);
+                                    SettingVisibilityOfBlock();
                                     x=1;
 
                                     break;
@@ -265,12 +266,8 @@ public class main_chat_activity extends AppCompatActivity {
                                     db.collection("chats")
                                             .document(email+myemail)
                                             .update("block by 2",false);
-                                    unblock.setVisibility(View.GONE);
-                                    block.setVisibility(View.VISIBLE);
-                                    send.setVisibility(View.VISIBLE);
-
+                                    SettingVisibilityOfUnblock();
                                     x=1;
-
                                     break;
                                 }
                             }
@@ -280,13 +277,10 @@ public class main_chat_activity extends AppCompatActivity {
                                 )) {
 
                                     db.collection("chats")
-                                            .document(email+myemail)
+                                            .document(myemail+email)
                                             .update("block by 1",false);
-                                    unblock.setVisibility(View.GONE);
-                                    send.setVisibility(View.VISIBLE);
-                                    block.setVisibility(View.VISIBLE);
+                                    SettingVisibilityOfUnblock();
                                     x=1;
-
                                     break;
                                 }
                             }
@@ -326,9 +320,7 @@ public class main_chat_activity extends AppCompatActivity {
                             name.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    Intent intent=new Intent(main_chat_activity.this,UserProfileActivity.class);
-                                    intent.putExtra("email",email);
-                                    startActivity(intent);
+                                    IntentToUserProfile(email);
                                 }
                             });
 
@@ -358,9 +350,7 @@ public class main_chat_activity extends AppCompatActivity {
                             name.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    Intent intent=new Intent(main_chat_activity.this,UserProfileActivity.class);
-                                    intent.putExtra("email",email);
-                                    startActivity(intent);
+                                    IntentToUserProfile(email);
                                 }
                             });
 
@@ -379,6 +369,7 @@ public class main_chat_activity extends AppCompatActivity {
         });
 
     }
+
     private void SetUpInitialChat() {
         db.collection("chats").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -400,7 +391,7 @@ public class main_chat_activity extends AppCompatActivity {
                                     mchatadapter2.notifyDataSetChanged();
                                 }
                             });
-                            mchatadapter2=new Main_chat_adapter_2(main_chat_activity.this,chat_ada2);
+                            mchatadapter2=new Main_chat_adapter(main_chat_activity.this,chat_ada2);
                             mchatadapter2.notifyDataSetChanged();
                             chat_view.setAdapter(mchatadapter2);
                             mchatadapter2.notifyDataSetChanged();
@@ -424,7 +415,7 @@ public class main_chat_activity extends AppCompatActivity {
                                     mchatadapter2.notifyDataSetChanged();
                                 }
                             });
-                            mchatadapter2=new Main_chat_adapter_2(main_chat_activity.this,chat_ada2);
+                            mchatadapter2=new Main_chat_adapter(main_chat_activity.this,chat_ada2);
                             mchatadapter2.notifyDataSetChanged();
                             chat_view.setAdapter(mchatadapter2);
                             mchatadapter2.notifyDataSetChanged();
@@ -436,5 +427,25 @@ public class main_chat_activity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void IntentToUserProfile(String emailid){
+        Intent intent=new Intent(main_chat_activity.this,UserProfileActivity.class);
+        intent.putExtra("email",emailid);
+        startActivity(intent);
+    }
+
+    private void SettingVisibilityOfBlock(){
+        block.setVisibility(View.GONE);
+        unblock.setVisibility(View.VISIBLE);
+        send.setVisibility(View.GONE);
+
+    }
+
+    private void SettingVisibilityOfUnblock(){
+        unblock.setVisibility(View.GONE);
+        block.setVisibility(View.VISIBLE);
+        send.setVisibility(View.VISIBLE);
+
     }
 }

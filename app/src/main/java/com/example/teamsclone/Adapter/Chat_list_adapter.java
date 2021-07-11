@@ -1,4 +1,4 @@
-package com.example.teamsclone;
+package com.example.teamsclone.Adapter;
 
 import android.app.Activity;
 import android.content.Context;
@@ -14,6 +14,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.teamsclone.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -31,12 +32,9 @@ public class Chat_list_adapter extends ArrayAdapter<Pair<String,String>> {
         ImageView user_image=(ImageView) convertView.findViewById(R.id.user_image);
         TextView one_chat=(TextView) convertView.findViewById(R.id.one_chat);
 
-      //  String main_chat=getItem(position).first;
         Picasso.get().load(Uri.parse(getItem(position).second)).into(user_image);
         one_chat.setText(getItem(position).first);
 
         return convertView;
-
-        //  one_chat.setText(main_chat.get(main_chat.keySet()));
     }
 }
