@@ -45,7 +45,6 @@ public class Main_chat_adapter extends ArrayAdapter<MainChatModel> {
         }
 
         final TextView one_chat=(TextView) convertView.findViewById(R.id.chat_personal);
-        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)one_chat.getLayoutParams();
 
         String talk=getItem(position).getTalk();
         one_chat.setText(talk);
@@ -58,8 +57,6 @@ public class Main_chat_adapter extends ArrayAdapter<MainChatModel> {
                if(getItem(position).getUser().equals(myemail)){
                    one_chat.setBackgroundResource(R.color.white);
                    one_chat.setGravity(Gravity.RIGHT);
-                   params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-                   one_chat.setLayoutParams(params);
                }
                else{
                    one_chat.setBackgroundResource(R.color.lightPurple);

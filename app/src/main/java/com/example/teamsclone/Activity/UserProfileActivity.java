@@ -1,4 +1,4 @@
-package com.example.teamsclone;
+package com.example.teamsclone.Activity;
 
 import android.net.Uri;
 import android.os.Bundle;
@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.teamsclone.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -26,6 +27,12 @@ public class UserProfileActivity extends AppCompatActivity {
     String email_id;
     FirebaseFirestore db;
     FirebaseAuth mAuth;
+
+    /**
+     * To see profile of other users--
+     * it shows email, name, user profile image in detail.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
