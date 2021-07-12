@@ -42,6 +42,7 @@ public class LoginActivity extends AppCompatActivity {
         if(mAuth.getCurrentUser()!=null&&mAuth.getCurrentUser().isEmailVerified()){
             Intent intent=new Intent(LoginActivity.this, WelcomeActivity.class);
             startActivity(intent);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             finish();
         }
         register.setOnClickListener(new View.OnClickListener() {

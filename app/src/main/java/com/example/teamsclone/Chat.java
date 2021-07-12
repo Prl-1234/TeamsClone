@@ -18,12 +18,16 @@ import androidx.fragment.app.Fragment;
 
 import com.example.teamsclone.Activity.main_chat_activity;
 import com.example.teamsclone.Adapter.Chat_list_adapter;
+import com.example.teamsclone.Adapter.Main_chat_adapter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -84,6 +88,7 @@ public class Chat extends Fragment {
                                     if(documentSnapshot.getString("email").equals(number)){
                                         Intent intent=new Intent(getContext(), main_chat_activity.class);
                                         intent.putExtra("email",number);
+                                        searchbar.setText("");
                                         startActivity(intent);
                                         exists=true;
                                         break;
@@ -110,40 +115,26 @@ public class Chat extends Fragment {
      * and sends appropriate result to setUpAdapter().
      */
     public void SetUpChatListOfUser() {
-        db.collection("chats").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        db.collection("chats").orderBy("time").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
-            public void onComplete(@NonNull final Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    //If the chat user is set as user1 in database
-                    int x = 0;
-                    for (final QueryDocumentSnapshot document : task.getResult()) {
-                        if (document.getString("us2").equals(myemail)) {
-                            chat_list.add(new Pair <String,String> (document.getString("name1"), document.getString("p1")));
-                            no_list.add(document.getString("us1"));
-                            SetUpAdapter();
-                        }
-                    }
-                    //If the chat user is set as user2 in database
-                    x=0;
-                    if(x==0){
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            if (document.getString("us1").equals(myemail)) {
-                                chat_list.add(new Pair <String,String> (document.getString("name2"), document.getString("p2")));
-                                no_list.add(document.getString("us2"));
-                                SetUpAdapter();
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                for(DocumentChange dc:value.getDocumentChanges()){
+                    if(dc.getType()==DocumentChange.Type.ADDED){
+                        if(dc.getDocument().getString("us1").equals(myemail)){
+                            chat_list.add(new Pair <String,String> (dc.getDocument().getString("name2"), dc.getDocument().getString("p2")));
+                            no_list.add(dc.getDocument().getString("us2"));
 
-                            }
+                        }
+                        else if(dc.getDocument().getString("us2").equals(myemail)){
+                            chat_list.add(new Pair <String,String> (dc.getDocument().getString("name1"), dc.getDocument().getString("p1")));
+                            no_list.add(dc.getDocument().getString("us1"));
+
                         }
                     }
                 }
+                adapter.notifyDataSetChanged();
             }
         });
-    }
-
-    /**
-     * Sets up all the chats the logged in user has ever messaged to.
-     */
-    private void SetUpAdapter(){
         adapter = new Chat_list_adapter(getContext(), chat_list);
         adapter.notifyDataSetChanged();
         listView.setAdapter(adapter);
@@ -160,4 +151,6 @@ public class Chat extends Fragment {
         x = 1;
         adapter.notifyDataSetChanged();
     }
+
+
 }

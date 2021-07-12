@@ -8,6 +8,7 @@
     <ImageView
         android:layout_width="300dp"
         android:layout_height="300dp"
+        android:scaleType="centerInside"
         android:layout_marginTop="10dp"
         android:id="@+id/user_image"
         android:layout_centerHorizontal="true"

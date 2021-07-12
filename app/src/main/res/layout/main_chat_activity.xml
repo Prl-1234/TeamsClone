@@ -23,6 +23,7 @@
             android:layout_width="50dp"
             android:id="@+id/user_image"
             android:layout_marginLeft="4dp"
+            android:src="@drawable/profile"
             android:layout_toRightOf="@+id/back_from_chat"
             android:layout_height="match_parent" />
         <TextView

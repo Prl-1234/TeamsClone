@@ -6,12 +6,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.teamsclone.Activity.WelcomeActivity;
 import com.example.teamsclone.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -34,6 +36,7 @@ public class RegisterActivity extends AppCompatActivity {
     private String Email,cpi;
     private String Username;
     private String Password;
+    private TextView login;
     private StorageReference storage;
     private FirebaseAuth mAuth;
     FirebaseFirestore db;
@@ -52,6 +55,7 @@ public class RegisterActivity extends AppCompatActivity {
         signUpBtn=(Button) findViewById(R.id.signUpbtn);
         mEmail=(EditText) findViewById(R.id.email);
         mUsername=(EditText) findViewById(R.id.name);
+        login=(TextView) findViewById(R.id.login);
         mpassword=(EditText) findViewById(R.id.password);
         storage = FirebaseStorage.getInstance().getReference();
 
@@ -61,8 +65,16 @@ public class RegisterActivity extends AppCompatActivity {
                 Email=mEmail.getText().toString();
                 Password=mpassword.getText().toString();
                 Username=mUsername.getText().toString();
-                    setUpFirebase(Email,Password,Username);
+                setUpFirebase(Email,Password,Username);
 
+            }
+        });
+        login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(RegisterActivity.this, LoginActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
     }
@@ -94,6 +106,7 @@ public class RegisterActivity extends AppCompatActivity {
                                                 @Override
                                                 public void onComplete(@NonNull Task<Void> task) {
                                                     if(task.isSuccessful()){
+
                                                         final StorageReference reference=storage.child("profile.png");
                                                         reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                                             @Override

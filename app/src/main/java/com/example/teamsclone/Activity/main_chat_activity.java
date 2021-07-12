@@ -65,6 +65,7 @@ public class main_chat_activity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent=new Intent(main_chat_activity.this, WelcomeActivity.class);
                 startActivity(intent);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 finish();
             }
         });
@@ -116,6 +117,9 @@ public class main_chat_activity extends AppCompatActivity {
                                                 chat_document.put("talk", msg);
                                                 chat_document.put("user", myemail);
                                                 db.collection("chats")
+                                                        .document( email+ myemail)
+                                                        .update("time",time);
+                                                db.collection("chats")
                                                         .document(email+ myemail)
                                                         .collection("all chats")
                                                         .document(time)
@@ -132,6 +136,9 @@ public class main_chat_activity extends AppCompatActivity {
                                                     Map<String, Object> chat_document = new HashMap<>();
                                                     chat_document.put("talk", msg);
                                                     chat_document.put("user", myemail);
+                                                    db.collection("chats")
+                                                            .document( myemail+email)
+                                                            .update("time",time);
                                                     db.collection("chats")
                                                             .document( myemail+email)
                                                             .collection("all chats")
@@ -166,6 +173,7 @@ public class main_chat_activity extends AppCompatActivity {
                                                                     two.put("name1", othername[0]);
                                                                     two.put("p2", p2[0]);
                                                                     two.put("p1", p1[0]);
+                                                                    two.put("time",time);
                                                                     two.put("block by 1",false);
                                                                     two.put("block by 2",false);
                                                                     db.collection("chats").document(email+ myemail).set(two)
