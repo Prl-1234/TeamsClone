@@ -462,10 +462,7 @@ public class main_chat_activity extends AppCompatActivity {
     private void SettingVisibilityOfUnblock(){
         unblock.setVisibility(View.GONE);
         block.setVisibility(View.VISIBLE);
-        if(isBlocked){
-
-        }
-        else{
+        if(!isBlocked){
             send.setVisibility(View.VISIBLE);
         }
     }
