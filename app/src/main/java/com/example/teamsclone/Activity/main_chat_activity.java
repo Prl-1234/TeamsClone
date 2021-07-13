@@ -47,6 +47,8 @@ public class main_chat_activity extends AppCompatActivity {
     Main_chat_adapter mchatadapter2;
     ImageView user_image;
     ArrayList<MainChatModel> chat_ada2;
+    boolean isBlocked;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +60,7 @@ public class main_chat_activity extends AppCompatActivity {
         unblock=(ImageView) findViewById(R.id.unblock_chat);
         block.setVisibility(View.GONE);
         unblock.setVisibility(View.GONE);
+        isBlocked=false;
 
         // Go to welcome activity
         back.setOnClickListener(new View.OnClickListener() {
@@ -316,6 +319,9 @@ public class main_chat_activity extends AppCompatActivity {
                             if((!documentSnapshot.getBoolean("block by 1"))&&(!documentSnapshot.getBoolean("block by 2"))){
                                 send.setVisibility(View.VISIBLE);
                             }
+                            if(documentSnapshot.getBoolean("block by 1")){
+                                isBlocked=true;
+                            }
                             if(documentSnapshot.getBoolean("block by 2")){
                                 unblock.setVisibility(View.VISIBLE);
                                 block.setVisibility(View.GONE);
@@ -345,6 +351,9 @@ public class main_chat_activity extends AppCompatActivity {
                             Picasso.get().load(Uri.parse(documentSnapshot.getString("p2"))).into(user_image);
                             if((!documentSnapshot.getBoolean("block by 2"))&&(!documentSnapshot.getBoolean("block by 1"))){
                                 send.setVisibility(View.VISIBLE);
+                            }
+                            if(documentSnapshot.getBoolean("block by 2")){
+                                isBlocked=true;
                             }
                             if(documentSnapshot.getBoolean("block by 1")){
                                 unblock.setVisibility(View.VISIBLE);
@@ -453,7 +462,11 @@ public class main_chat_activity extends AppCompatActivity {
     private void SettingVisibilityOfUnblock(){
         unblock.setVisibility(View.GONE);
         block.setVisibility(View.VISIBLE);
-        send.setVisibility(View.VISIBLE);
+        if(isBlocked){
 
+        }
+        else{
+            send.setVisibility(View.VISIBLE);
+        }
     }
 }
